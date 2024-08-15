@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Realtime Chat Room</title>
+</head>
+<body>
+    <h1>Realtime Chat Room</h1>
+    <input type="text" id="roomId" placeholder="Room ID">
+    <button onclick="connect()">Connect</button>
+    <div id="chatBox"></div>
+    <input type="text" id="messageText" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        var websocket;
+
+        function connect() {
+            var roomId = document.getElementById("roomId").value;
+            websocket = new WebSocket("ws://localhost:9000/ws/" + roomId);
+
+            websocket.onmessage = function(event) {
+                var chatBox = document.getElementById("chatBox");
+                var message = document.createElement("p");
+                message.innerText = event.data;
+                chatBox.appendChild(message);
+            };
+        }
+
+        function sendMessage() {
+            console.log("send msg success")
+            var messageText = document.getElementById("messageText").value;
+            websocket.send(messageText);
+        }
+    </script>
+</body>
+</html>
